@@ -71,6 +71,15 @@ Filter logs by category:
 ConsoleLogSink(level: .min(.debug), categories: [.networking])
 ```
 
+Add multible sinks for different usecases:
+```
+// Log all with min level warning
+Logbook.add(sink: ConsoleLogSink(level: .min(.warning)))
+
+// Log only level error with category .networking
+Logbook.add(sink: ConsoleLogSink(level: .fix(.error), categories: [.networking]))
+```
+
 ### Formatting
 
 Add custom dateFormatter to sink
