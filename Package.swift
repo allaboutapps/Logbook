@@ -13,9 +13,8 @@ let package = Package(
     products: [
         .library(name: "Logbook", targets: ["Logbook"])
     ],
-    dependencies: [],
     targets: [
-        .target(name: "Logbook", dependencies: [], path: "Logbook/Source")
+        .target(name: "Logbook", path: "Logbook/Source")
     ],
     swiftLanguageVersions: [.v5]
 )
