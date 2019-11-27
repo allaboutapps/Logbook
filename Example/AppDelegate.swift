@@ -23,7 +23,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         // Add sink to Logbook
         Logbook.add(sink: console)
-
+        
         // Override default LogCategory
         LogCategory.default = LogCategory("default", prefix: "💿")
         
