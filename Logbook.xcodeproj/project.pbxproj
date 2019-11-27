@@ -25,6 +25,7 @@
 		19E97604238EBBC300ECED37 /* Logbook.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19E975FF238EBBC300ECED37 /* Logbook.swift */; };
 		19E97607238EBED500ECED37 /* LogMessageHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19E97606238EBED500ECED37 /* LogMessageHeader.swift */; };
 		19E97609238EBF3F00ECED37 /* LogMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19E97608238EBF3F00ECED37 /* LogMessage.swift */; };
+		19E9760B238EC2B400ECED37 /* LogPlaceholder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19E9760A238EC2B400ECED37 /* LogPlaceholder.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -88,6 +89,7 @@
 		19E97605238EBD6D00ECED37 /* Package.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Package.swift; sourceTree = "<group>"; };
 		19E97606238EBED500ECED37 /* LogMessageHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogMessageHeader.swift; sourceTree = "<group>"; };
 		19E97608238EBF3F00ECED37 /* LogMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogMessage.swift; sourceTree = "<group>"; };
+		19E9760A238EC2B400ECED37 /* LogPlaceholder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogPlaceholder.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -180,6 +182,7 @@
 				19E97606238EBED500ECED37 /* LogMessageHeader.swift */,
 				19E97608238EBF3F00ECED37 /* LogMessage.swift */,
 				19E975FA238EBBC200ECED37 /* Sink */,
+				19E9760A238EC2B400ECED37 /* LogPlaceholder.swift */,
 			);
 			path = Source;
 			sourceTree = "<group>";
@@ -352,6 +355,7 @@
 				19E97604238EBBC300ECED37 /* Logbook.swift in Sources */,
 				19E97607238EBED500ECED37 /* LogMessageHeader.swift in Sources */,
 				19E97601238EBBC300ECED37 /* LogSink.swift in Sources */,
+				19E9760B238EC2B400ECED37 /* LogPlaceholder.swift in Sources */,
 				19E97603238EBBC300ECED37 /* LogLevel.swift in Sources */,
 				19E97602238EBBC300ECED37 /* LogCategory.swift in Sources */,
 				19E97609238EBF3F00ECED37 /* LogMessage.swift in Sources */,

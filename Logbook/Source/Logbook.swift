@@ -105,7 +105,7 @@ public class Logbook {
             let messages: [String] = ((items.first as? [Any])?.compactMap({ shared.anyString($0) }) ?? [""])
             
             let header = LogMessageHeader(date: Date(), file: file, line: line, function: function)
-            let message = LogMessage(header: header, category: category, messages: messages, separator: separator)
+            let message = LogMessage(header: header, level: level, category: category, messages: messages, separator: separator)
             
             if level.shouldLogAsynchronously {
                 shared.queue.async {

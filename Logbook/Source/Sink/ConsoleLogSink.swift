@@ -14,6 +14,8 @@ public class ConsoleLogSink: LogSink {
     public var itemSeparator: String = " "
     public private(set) var categories: [LogCategory]
     public private(set) var level: LevelMode
+    
+    public var format: String = LogPlaceholder.defaultLogFormat
     public var dateFormatter: DateFormatter
     
     public init(level: LevelMode, categories: [LogCategory] = [], prefix: String? = nil) {
@@ -26,10 +28,19 @@ public class ConsoleLogSink: LogSink {
     }
     
     public func send(_ message: LogMessage) {
-        let formattedHeader = "\(message.category.prefix ?? "") \(dateFormatter.string(from: message.header.date)) [\(message.header.file.name) \(message.header.function): \(message.header.line)]"
-        let formttedMessages = message.messages.joined(separator: message.separator ?? itemSeparator)
         
-        print("\(formattedHeader) - \(formttedMessages)")
+        let messages = message.messages.joined(separator: message.separator ?? itemSeparator)
+        
+        var final = format
+        final = final.replacingOccurrences(of: LogPlaceholder.category, with: message.category.prefix ?? prefix ?? "")
+        final = final.replacingOccurrences(of: LogPlaceholder.level, with: "\(message.level)")
+        final = final.replacingOccurrences(of: LogPlaceholder.date, with: dateFormatter.string(from: message.header.date))
+        final = final.replacingOccurrences(of: LogPlaceholder.file, with: message.header.file.name)
+        final = final.replacingOccurrences(of: LogPlaceholder.function, with: message.header.function)
+        final = final.replacingOccurrences(of: LogPlaceholder.line, with: "\(message.header.line)")
+        final = final.replacingOccurrences(of: LogPlaceholder.messages, with: messages)
+        
+        print(final)
     }
 
 }

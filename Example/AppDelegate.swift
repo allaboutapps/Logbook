@@ -16,13 +16,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
 
+        // Create sink
+        let console = ConsoleLogSink(level: .min(.debug))
+        // change format
+        console.format = "\(LogPlaceholder.category) \(LogPlaceholder.date): \(LogPlaceholder.messages)"
+        
         // Add sink to Logbook
-        Logbook.add(sink: ConsoleLogSink(level: .min(.debug)))
+        Logbook.add(sink: console)
 
-        // override default LogCategory
+        // Override default LogCategory
         LogCategory.default = LogCategory("default", prefix: "💿")
         
-        log.debug("default log")
+        log.debug("default log", application, launchOptions)
         log.debug("didFinishLaunchingWithOptions", category: .startup)
         
         log.error("something went wrong")
