@@ -14,9 +14,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "19E97560238EB47F00ECED37"
-               BuildableName = "Example.app"
-               BlueprintName = "Example"
+               BlueprintIdentifier = "19E975DB238EBB7400ECED37"
+               BuildableName = "Logbook.framework"
+               BlueprintName = "Logbook"
                ReferencedContainer = "container:Logbook.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -28,26 +28,6 @@
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "19E975E3238EBB7400ECED37"
-               BuildableName = "LogbookTests.xctest"
-               BlueprintName = "LogbookTests"
-               ReferencedContainer = "container:Logbook.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "19E975E3238EBB7400ECED37"
-               BuildableName = "LogbookTests.xctest"
-               BlueprintName = "LogbookTests"
-               ReferencedContainer = "container:Logbook.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
       </Testables>
    </TestAction>
    <LaunchAction
@@ -60,16 +40,6 @@
       debugDocumentVersioning = "YES"
       debugServiceExtension = "internal"
       allowLocationSimulation = "YES">
-      <BuildableProductRunnable
-         runnableDebuggingMode = "0">
-         <BuildableReference
-            BuildableIdentifier = "primary"
-            BlueprintIdentifier = "19E97560238EB47F00ECED37"
-            BuildableName = "Example.app"
-            BlueprintName = "Example"
-            ReferencedContainer = "container:Logbook.xcodeproj">
-         </BuildableReference>
-      </BuildableProductRunnable>
    </LaunchAction>
    <ProfileAction
       buildConfiguration = "Release"
@@ -77,16 +47,15 @@
       savedToolIdentifier = ""
       useCustomWorkingDirectory = "NO"
       debugDocumentVersioning = "YES">
-      <BuildableProductRunnable
-         runnableDebuggingMode = "0">
+      <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "19E97560238EB47F00ECED37"
-            BuildableName = "Example.app"
-            BlueprintName = "Example"
+            BlueprintIdentifier = "19E975DB238EBB7400ECED37"
+            BuildableName = "Logbook.framework"
+            BlueprintName = "Logbook"
             ReferencedContainer = "container:Logbook.xcodeproj">
          </BuildableReference>
-      </BuildableProductRunnable>
+      </MacroExpansion>
    </ProfileAction>
    <AnalyzeAction
       buildConfiguration = "Debug">
