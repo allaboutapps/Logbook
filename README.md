@@ -56,9 +56,39 @@ extension LogCategory {
 log.debug("hello", category: .startup)
 ```
 
+### LogSinks
+
+Filter logs by level.
+
+```
+ConsoleLogSink(level: .min(.warning))
+ConsoleLogSink(level: .fix(.info))
+```
+
+Filter logs by category:
+
+```
+ConsoleLogSink(level: .min(.debug), categories: [.networking])
+```
+
 ### Formatting
 
-TODO: 
+Add custom dateFormatter to sink
+
+```
+let dateFormatter = DateFormatter()
+dateFormatter.dateStyle = .none
+dateFormatter.timeStyle = .short
+
+let console = ConsoleLogSink(level: .min(.debug), categories: [.networking])
+console.dateFormatter = dateFormatter
+```
+
+Add logging format to ConsoleLogSink
+
+```
+console.format = "\(LogPlaceholder.category) \(LogPlaceholder.date): \(LogPlaceholder.messages)"
+```
 
 ### Custom LogSink
 

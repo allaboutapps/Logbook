@@ -16,8 +16,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
 
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateStyle = .none
+        dateFormatter.timeStyle = .short
+        
         // Create sink
-        let console = ConsoleLogSink(level: .min(.debug))
+        let console = ConsoleLogSink(level: .min(.debug), categories: [.networking])
+        
+        // change date format
+        console.dateFormatter = dateFormatter
+        
         // change format
         console.format = "\(LogPlaceholder.category) \(LogPlaceholder.date): \(LogPlaceholder.messages)"
         
