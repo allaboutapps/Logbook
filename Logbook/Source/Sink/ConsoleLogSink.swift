@@ -25,8 +25,11 @@ public class ConsoleLogSink: LogSink {
         self.dateFormatter.timeStyle = .medium
     }
     
-    public func send(_ message: String) {
-        print(message)
+    public func send(_ message: LogMessage) {
+        let formattedHeader = "\(message.category.prefix ?? "") \(dateFormatter.string(from: message.header.date)) [\(message.header.file.name) \(message.header.function): \(message.header.line)]"
+        let formttedMessages = message.messages.joined(separator: message.separator ?? itemSeparator)
+        
+        print("\(formattedHeader) - \(formttedMessages)")
     }
 
 }

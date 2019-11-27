@@ -25,17 +25,9 @@ public protocol LogSink {
     
     var itemSeparator: String { get set }
     
-    func send(_ message: String)
+    func send(_ message: LogMessage)
     
 }
-
-//struct Message {
-//    let uuid: String
-//    let header {
-//        time, file, meth, line
-//    }
-//    let messages: [String]
-//}
 
 extension LogSink {
     

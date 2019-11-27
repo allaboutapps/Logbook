@@ -102,17 +102,18 @@ public class Logbook {
             guard sink.shouldLevelBeLogged(level) else { continue }
             guard sink.shouldCategoryBeLogged(category) else { continue }
             
-            let message: String = ((items.first as? [Any])?.compactMap({ shared.anyString($0) }) ?? [""]).joined(separator: separator ?? sink.itemSeparator)
+            let messages: [String] = ((items.first as? [Any])?.compactMap({ shared.anyString($0) }) ?? [""])
             
-            let formattedMessage = "\(category.prefix ?? "") \(sink.dateFormatter.string(from: Date())) [\(file.name) \(function): \(line)] - \(message)"
+            let header = LogMessageHeader(date: Date(), file: file, line: line, function: function)
+            let message = LogMessage(header: header, category: category, messages: messages, separator: separator)
             
             if level.shouldLogAsynchronously {
                 shared.queue.async {
-                    sink.send(formattedMessage)
+                    sink.send(message)
                 }
             } else {
                 shared.queue.sync {
-                    sink.send(formattedMessage)
+                    sink.send(message)
                 }
             }
             
@@ -146,7 +147,7 @@ public class Logbook {
 
 // MARK: - Logbook.FileName
 
-private extension Logbook.FileName {
+extension Logbook.FileName {
     
     var name: String {
         return components(separatedBy: "/").last ?? ""
