@@ -10,14 +10,14 @@ import Foundation
 
 public class ConsoleLogSink: LogSink {
     
-    public var itemSeparator: String = " "
-    public private(set) var categories: [LogCategory]
-    public private(set) var level: LevelMode
+    public let level: LevelMode
+    public let categories: LogCategoryFilter
     
+    public var itemSeparator: String = " "
     public var format: String = LogPlaceholder.defaultLogFormat
     public var dateFormatter: DateFormatter
     
-    public init(level: LevelMode, categories: [LogCategory] = []) {
+    public init(level: LevelMode, categories: LogCategoryFilter = .all) {
         self.level = level
         self.categories = categories
         self.dateFormatter = DateFormatter()

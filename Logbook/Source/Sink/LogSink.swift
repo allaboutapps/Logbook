@@ -17,7 +17,7 @@ public protocol LogSink {
     
     var level: LevelMode { get }
     
-    var categories: [LogCategory] { get }
+    var categories: LogCategoryFilter { get }
     
     var dateFormatter: DateFormatter { get set }
     
@@ -40,10 +40,13 @@ extension LogSink {
     }
     
     func shouldCategoryBeLogged(_ category: LogCategory) -> Bool {
-        if categories.isEmpty {
+        switch categories {
+        case .all:
             return true
-        } else {
-            return self.categories.contains(category)
+        case .include(let cats):
+            return cats.contains(category)
+        case .exclude(let cats):
+            return !cats.contains(category)
         }
     }
     

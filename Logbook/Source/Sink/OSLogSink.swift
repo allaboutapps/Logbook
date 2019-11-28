@@ -11,26 +11,25 @@ import os
 
 public class OSLogSink: LogSink {
     
-    public var itemSeparator: String = " "
-    public private(set) var categories: [LogCategory]
-    public private(set) var level: LevelMode
+    public let level: LevelMode
+    public let categories: LogCategoryFilter
     
+    public var itemSeparator: String = " "
     public var format: String = "\(LogPlaceholder.category) \(LogPlaceholder.date) [\(LogPlaceholder.file) \(LogPlaceholder.function): \(LogPlaceholder.line)] - \(LogPlaceholder.messages)"
-    public var dateFormatter: DateFormatter
+    public var dateFormatter = DateFormatter()
     
     private let customLog: OSLog
     private let isPublic: Bool
     
-    public init(level: LevelMode, categories: [LogCategory] = [], isPublic: Bool = false) {
+    public init(level: LevelMode, categories: LogCategoryFilter = .all, isPublic: Bool = false) {
         self.level = level
         self.categories = categories
-        self.dateFormatter = DateFormatter()
-        self.dateFormatter.dateStyle = .short
-        self.dateFormatter.timeStyle = .medium
-        
-        customLog = OSLog(subsystem: Bundle.main.bundleIdentifier ?? "at.allaboutapps.logbook", category: "Logbook")
         self.isPublic = isPublic
         
+        dateFormatter.dateStyle = .short
+        dateFormatter.timeStyle = .medium
+        
+        customLog = OSLog(subsystem: Bundle.main.bundleIdentifier ?? "at.allaboutapps.logbook", category: "Logbook")
     }
     
     public func send(_ message: LogMessage) {
@@ -50,7 +49,7 @@ public class OSLogSink: LogSink {
             os_log("%{public}s", log: customLog, type: message.level.osLogType, final)
         } else {
             os_log("%{private}s", log: customLog, type: message.level.osLogType, final)
-        }   
+        }
     }
     
 }

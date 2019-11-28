@@ -11,7 +11,8 @@ import Foundation
 public final class FileLogSink: LogSink {
     
     public let level: LevelMode
-    public let categories: [LogCategory]
+    public let categories: LogCategoryFilter
+    
     private let logFileURL: URL
     private let maxFileSizeInKb: UInt64
     
@@ -19,7 +20,7 @@ public final class FileLogSink: LogSink {
     public var format: String = LogPlaceholder.defaultLogFormat
     public var dateFormatter: DateFormatter
     
-    public init(level: LevelMode, categories: [LogCategory] = [], baseDirectory: URL, fileName: String = "Log", maxFileSize: UInt64 = 1024) {
+    public init(level: LevelMode, categories: LogCategoryFilter = .all, baseDirectory: URL, fileName: String = "Log", maxFileSize: UInt64 = 1024) {
         self.level = level
         self.categories = categories
         self.logFileURL = baseDirectory.appendingPathComponent("\(fileName).log", isDirectory: false)

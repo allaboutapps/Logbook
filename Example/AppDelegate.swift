@@ -39,7 +39,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Override default LogCategory
         LogCategory.default = LogCategory("default", prefix: "💿")
         
+        // Add Consolse log with category filter
+        Logbook.add(sink: ConsoleLogSink(level: .fix(.info), categories: .all))
+        Logbook.add(sink: ConsoleLogSink(level: .fix(.info), categories: .include([.startup])))
+        Logbook.add(sink: ConsoleLogSink(level: .fix(.info), categories: .exclude([.networking])))
         
+        log.info("Log default")
+        log.info("Log startup", category: .startup)
+        log.info("Log networking", category: .networking)
+        
+//        addOSLog()
+//        addFileLog()
         
         // testmessage
         logToFile()
@@ -55,7 +65,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     private func addFileLog() {
         guard let path = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else { return }
         
-        let fileSink = FileLogSink(level: .min(.debug), categories: [.fileTest], baseDirectory: path, maxFileSize: 5)
+        let fileSink = FileLogSink(level: .min(.debug), categories: .include([.fileTest]), baseDirectory: path, maxFileSize: 100)
         Logbook.add(sink: fileSink)
     }
     

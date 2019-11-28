@@ -29,6 +29,7 @@
 		19E9760E238FB22C00ECED37 /* FileLogSink.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19E9760D238FB22C00ECED37 /* FileLogSink.swift */; };
 		19E97611238FC28F00ECED37 /* BackgroundTimer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19E97610238FC28F00ECED37 /* BackgroundTimer.swift */; };
 		19E97613238FE71D00ECED37 /* OSLogSink.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19E97612238FE71D00ECED37 /* OSLogSink.swift */; };
+		19E9761A23901FC200ECED37 /* LogCategoryFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19E9761923901FC200ECED37 /* LogCategoryFilter.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -97,6 +98,7 @@
 		19E9760D238FB22C00ECED37 /* FileLogSink.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileLogSink.swift; sourceTree = "<group>"; };
 		19E97610238FC28F00ECED37 /* BackgroundTimer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackgroundTimer.swift; sourceTree = "<group>"; };
 		19E97612238FE71D00ECED37 /* OSLogSink.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OSLogSink.swift; sourceTree = "<group>"; };
+		19E9761923901FC200ECED37 /* LogCategoryFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogCategoryFilter.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -184,14 +186,15 @@
 		19E975F9238EBBA800ECED37 /* Source */ = {
 			isa = PBXGroup;
 			children = (
-				19E9760F238FC27A00ECED37 /* Utilities */,
 				19E975FF238EBBC300ECED37 /* Logbook.swift */,
 				19E975FD238EBBC300ECED37 /* LogCategory.swift */,
+				19E9761923901FC200ECED37 /* LogCategoryFilter.swift */,
 				19E975FE238EBBC300ECED37 /* LogLevel.swift */,
-				19E97606238EBED500ECED37 /* LogMessageHeader.swift */,
 				19E97608238EBF3F00ECED37 /* LogMessage.swift */,
-				19E975FA238EBBC200ECED37 /* Sink */,
+				19E97606238EBED500ECED37 /* LogMessageHeader.swift */,
 				19E9760A238EC2B400ECED37 /* LogPlaceholder.swift */,
+				19E975FA238EBBC200ECED37 /* Sink */,
+				19E9760F238FC27A00ECED37 /* Utilities */,
 			);
 			path = Source;
 			sourceTree = "<group>";
@@ -370,6 +373,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				19E9761A23901FC200ECED37 /* LogCategoryFilter.swift in Sources */,
 				19E97600238EBBC300ECED37 /* ConsoleLogSink.swift in Sources */,
 				19E97611238FC28F00ECED37 /* BackgroundTimer.swift in Sources */,
 				19E97604238EBBC300ECED37 /* Logbook.swift in Sources */,
