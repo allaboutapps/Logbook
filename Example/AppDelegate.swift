@@ -40,7 +40,26 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         log.error("something went wrong")
         
+        // log all with min level warning
+        Logbook.add(sink: ConsoleLogSink(level: .min(.debug)))
+        // log only level error with category .networking
+        Logbook.add(sink: ConsoleLogSink(level: .fix(.error), categories: [.networking]))
+        
+        if let path = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first {
+            let fileSink = FileLogSink(level: .min(.debug), categories: [.fileTest], baseDirectory: path)
+            Logbook.add(sink: fileSink)
+        }
+        
+        logToFile()
+        
         return true
+    }
+    
+    func logToFile() {
+        DispatchQueue.main.asyncAfter (deadline: .now() + .milliseconds(500)) {
+            log.debug("Test String", category: .fileTest)
+            self.logToFile()
+        }
     }
 }
 
@@ -49,5 +68,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 extension LogCategory {
     
     static let startup = LogCategory("startup", prefix: "🚦")
+    static let fileTest = LogCategory("filetest", prefix: "💾")
     
 }

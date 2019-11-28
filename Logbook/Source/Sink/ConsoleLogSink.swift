@@ -10,7 +10,6 @@ import Foundation
 
 public class ConsoleLogSink: LogSink {
     
-    public var prefix: String?
     public var itemSeparator: String = " "
     public private(set) var categories: [LogCategory]
     public private(set) var level: LevelMode
@@ -18,12 +17,11 @@ public class ConsoleLogSink: LogSink {
     public var format: String = LogPlaceholder.defaultLogFormat
     public var dateFormatter: DateFormatter
     
-    public init(level: LevelMode, categories: [LogCategory] = [], prefix: String? = nil) {
+    public init(level: LevelMode, categories: [LogCategory] = []) {
         self.level = level
         self.categories = categories
-        self.prefix = prefix
         self.dateFormatter = DateFormatter()
-        self.dateFormatter.dateStyle = .none
+        self.dateFormatter.dateStyle = .short
         self.dateFormatter.timeStyle = .medium
     }
     
@@ -32,7 +30,7 @@ public class ConsoleLogSink: LogSink {
         let messages = message.messages.joined(separator: message.separator ?? itemSeparator)
         
         var final = format
-        final = final.replacingOccurrences(of: LogPlaceholder.category, with: message.category.prefix ?? prefix ?? "")
+        final = final.replacingOccurrences(of: LogPlaceholder.category, with: message.category.prefix ?? "")
         final = final.replacingOccurrences(of: LogPlaceholder.level, with: "\(message.level)")
         final = final.replacingOccurrences(of: LogPlaceholder.date, with: dateFormatter.string(from: message.header.date))
         final = final.replacingOccurrences(of: LogPlaceholder.file, with: message.header.file.name)
