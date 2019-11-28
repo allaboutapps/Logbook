@@ -26,7 +26,7 @@ public final class FileLogSink: LogSink {
         self.maxFileSizeInKb = maxFileSize
         self.dateFormatter = DateFormatter()
         self.dateFormatter.dateStyle = .short
-        self.dateFormatter.timeStyle = .short
+        self.dateFormatter.timeStyle = .medium
         
         if fileManager.fileExists(atPath: logFileURL.path) == false {
             fileManager.createFile(atPath: logFileURL.path, contents: nil, attributes: [.creationDate : Date()])
@@ -44,15 +44,25 @@ public final class FileLogSink: LogSink {
             return nil
         }
     }()
-        
+    
+    private var lineCache: [String] = []
+    private let throttleWriteInterval: TimeInterval = 5.0
+    
+    private var timer: BackgroundTimer?
+    
     public func send(_ message: LogMessage) {
         
-        let line = createString(for: message)
-        
-        // append to end of existing file
-        guard let fileHandle = fileHandle, let data = line.data(using: .utf8) else { return }
-        fileHandle.seekToEndOfFile()
-        fileHandle.write(data)
+        lineCache.append(createString(for: message))
+
+        if timer == nil {
+            timer = BackgroundTimer(timeInterval: throttleWriteInterval)
+            timer?.eventHandler = {
+                self.writeCacheToFile()
+                self.timer?.suspend()
+                self.timer = nil
+            }
+            timer?.resume()
+        }
     }
     
     private func createString(for message: LogMessage) -> String {
@@ -71,8 +81,22 @@ public final class FileLogSink: LogSink {
         return final
     }
     
-    func shouldCreateNewFile(at path: String) -> Bool {
-        // TODO: create new file when maximum size is reached ?
-        return !fileManager.fileExists(atPath: path)
+}
+
+// MARK: - File
+
+extension FileLogSink {
+    
+    private func writeCacheToFile() {
+        guard !lineCache.isEmpty else { return }
+        
+        let string = lineCache.reduce(into: "", { $0 += $1 })
+        lineCache.removeAll()
+        
+        // append to end of existing file
+        guard let fileHandle = fileHandle, let data = string.data(using: .utf8) else { return }
+        fileHandle.seekToEndOfFile()
+        fileHandle.write(data)
     }
+    
 }
