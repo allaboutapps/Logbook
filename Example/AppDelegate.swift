@@ -50,6 +50,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             Logbook.add(sink: fileSink)
         }
         
+        Logbook.add(sink: OSLogSink(level: .min(.debug), isPublic: true))
+        
         logToFile()
         
         return true
@@ -57,7 +59,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func logToFile() {
         DispatchQueue.main.asyncAfter (deadline: .now() + .milliseconds(500)) {
-            log.debug("Test String", category: .fileTest)
+            log.error("Test String", category: .fileTest)
             self.logToFile()
         }
     }
