@@ -47,11 +47,10 @@ public class OSLogSink: LogSink {
         final = final.replacingOccurrences(of: LogPlaceholder.messages, with: messages)
         
         if isPublic {
-            os_log("%{PUBLIC}@", log: customLog, type: message.level.osLogType, final)
+            os_log("%{public}s", log: customLog, type: message.level.osLogType, final)
         } else {
-            os_log("%{PRIVATE}@", log: customLog, type: message.level.osLogType, final)
-        }
-        
+            os_log("%{private}s", log: customLog, type: message.level.osLogType, final)
+        }   
     }
     
 }
