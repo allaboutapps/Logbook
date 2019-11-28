@@ -19,7 +19,7 @@ public final class FileLogSink: LogSink {
     public var format: String = LogPlaceholder.defaultLogFormat
     public var dateFormatter: DateFormatter
     
-    public init(level: LevelMode, categories: [LogCategory] = [], baseDirectory: URL, fileName: String = "Log", maxFileSize: UInt64 = 20) {
+    public init(level: LevelMode, categories: [LogCategory] = [], baseDirectory: URL, fileName: String = "Log", maxFileSize: UInt64 = 1024) {
         self.level = level
         self.categories = categories
         self.logFileURL = baseDirectory.appendingPathComponent("\(fileName).log", isDirectory: false)
@@ -33,10 +33,14 @@ public final class FileLogSink: LogSink {
         }
     }
     
+    deinit {
+        fileHandle?.closeFile()
+    }
+    
     private let fileManager = FileManager.default
     private lazy var fileHandle: FileHandle? = {
         do {
-            let handle = try FileHandle(forWritingTo: logFileURL)
+            let handle = try FileHandle(forUpdating: logFileURL)
             return handle
         } catch {
             print("Failed to create FileHandle for URL \(logFileURL.absoluteString)")
@@ -90,13 +94,52 @@ extension FileLogSink {
     private func writeCacheToFile() {
         guard !lineCache.isEmpty else { return }
         
+        let bytes = bytesToRemove()
+        if bytes > 0 {
+            removeBytesFromFile(bytes)
+        }
+        
         let string = lineCache.reduce(into: "", { $0 += $1 })
         lineCache.removeAll()
         
         // append to end of existing file
         guard let fileHandle = fileHandle, let data = string.data(using: .utf8) else { return }
+        
+        
+        
         fileHandle.seekToEndOfFile()
         fileHandle.write(data)
     }
+ 
+    private func bytesToRemove() -> UInt64 {
+        do {
+            let attr = try fileManager.attributesOfItem(atPath: logFileURL.path)
+            let fileSize = attr[FileAttributeKey.size] as! UInt64
+            let maxFileSize = maxFileSizeInKb * 1024
+            
+            let toRemove: UInt64 = (fileSize > maxFileSize) ? fileSize - maxFileSize: 0
+                
+            print("FileSize: \(fileSize)")
+            print("toRemove: \(toRemove)")
+            
+            return toRemove
+            
+        } catch {
+            print("Error: \(error)")
+            return 0
+        }
+    }
     
+    private func removeBytesFromFile(_ size: UInt64) {
+        guard let fileHandle = fileHandle else { return }
+        
+        fileHandle.seek(toFileOffset: 0)
+        
+        var data = fileHandle.readDataToEndOfFile()
+        data.replaceSubrange(0...Int(size), with: Data())
+        
+        fileHandle.truncateFile(atOffset: 0)
+        fileHandle.seek(toFileOffset: 0)
+        fileHandle.write(data)
+    }
 }

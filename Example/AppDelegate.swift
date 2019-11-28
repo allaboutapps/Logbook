@@ -41,7 +41,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         log.error("something went wrong")
         
         // log all with min level warning
-        Logbook.add(sink: ConsoleLogSink(level: .min(.warning)))
+        Logbook.add(sink: ConsoleLogSink(level: .min(.debug)))
         // log only level error with category .networking
         Logbook.add(sink: ConsoleLogSink(level: .fix(.error), categories: [.networking]))
         
