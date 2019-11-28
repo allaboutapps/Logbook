@@ -14,14 +14,18 @@ let log = Logbook.self
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
     
+    private lazy var dateFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateStyle = .none
+        formatter.timeStyle = .short
+        return formatter
+    }()
+    
+    
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
 
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateStyle = .none
-        dateFormatter.timeStyle = .short
-        
         // Create sink
-        let console = ConsoleLogSink(level: .min(.debug), categories: [.networking])
+        let console = ConsoleLogSink(level: .min(.debug))
         
         // change date format
         console.dateFormatter = dateFormatter
@@ -35,29 +39,27 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Override default LogCategory
         LogCategory.default = LogCategory("default", prefix: "💿")
         
-        log.debug("default log", application, launchOptions)
-        log.debug("didFinishLaunchingWithOptions", category: .startup)
         
-        log.error("something went wrong")
         
-        // log all with min level warning
-        Logbook.add(sink: ConsoleLogSink(level: .min(.debug)))
-        // log only level error with category .networking
-        Logbook.add(sink: ConsoleLogSink(level: .fix(.error), categories: [.networking]))
-        
-        if let path = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first {
-            let fileSink = FileLogSink(level: .min(.debug), categories: [.fileTest], baseDirectory: path)
-            Logbook.add(sink: fileSink)
-        }
-        
-        Logbook.add(sink: OSLogSink(level: .min(.debug), isPublic: true))
-        
+        // testmessage
         logToFile()
         
         return true
     }
     
-    func logToFile() {
+    private func addOSLog() {
+        let ossink = OSLogSink(level: .min(.debug), isPublic: false)
+        Logbook.add(sink: ossink)
+    }
+    
+    private func addFileLog() {
+        guard let path = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else { return }
+        
+        let fileSink = FileLogSink(level: .min(.debug), categories: [.fileTest], baseDirectory: path, maxFileSize: 5)
+        Logbook.add(sink: fileSink)
+    }
+    
+    private func logToFile() {
         DispatchQueue.main.asyncAfter (deadline: .now() + .milliseconds(500)) {
             log.error("Test String", category: .fileTest)
             self.logToFile()

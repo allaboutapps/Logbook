@@ -43,8 +43,6 @@ public final class FileLogSink: LogSink {
             let handle = try FileHandle(forUpdating: logFileURL)
             return handle
         } catch {
-            print("Failed to create FileHandle for URL \(logFileURL.absoluteString)")
-            print(error)
             return nil
         }
     }()
@@ -94,21 +92,21 @@ extension FileLogSink {
     private func writeCacheToFile() {
         guard !lineCache.isEmpty else { return }
         
+        let string = lineCache.reduce(into: "", { $0 += $1 })
+        
+        guard let fileHandle = fileHandle, let data = string.data(using: .utf8) else { return }
+        
+        lineCache.removeAll()
+        
+        // append to end of existing file
+        fileHandle.seekToEndOfFile()
+        fileHandle.write(data)
+        
+        // reduce file size if needed
         let bytes = bytesToRemove()
         if bytes > 0 {
             removeBytesFromFile(bytes)
         }
-        
-        let string = lineCache.reduce(into: "", { $0 += $1 })
-        lineCache.removeAll()
-        
-        // append to end of existing file
-        guard let fileHandle = fileHandle, let data = string.data(using: .utf8) else { return }
-        
-        
-        
-        fileHandle.seekToEndOfFile()
-        fileHandle.write(data)
     }
  
     private func bytesToRemove() -> UInt64 {
@@ -118,14 +116,10 @@ extension FileLogSink {
             let maxFileSize = maxFileSizeInKb * 1024
             
             let toRemove: UInt64 = (fileSize > maxFileSize) ? fileSize - maxFileSize: 0
-                
-            print("FileSize: \(fileSize)")
-            print("toRemove: \(toRemove)")
             
             return toRemove
             
         } catch {
-            print("Error: \(error)")
             return 0
         }
     }
