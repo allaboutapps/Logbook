@@ -68,7 +68,11 @@ ConsoleLogSink(level: .fix(.info))
 Filter logs by category:
 
 ```
-ConsoleLogSink(level: .min(.debug), categories: [.networking])
+ConsoleLogSink(level: .min(.debug), categories: .include([.networking]))
+```
+or
+```
+ConsoleLogSink(level: .min(.debug), categories: .exclude([.networking]))
 ```
 
 Add multible sinks for different usecases:
@@ -77,7 +81,7 @@ Add multible sinks for different usecases:
 Logbook.add(sink: ConsoleLogSink(level: .min(.warning)))
 
 // Log only level error with category .networking
-Logbook.add(sink: ConsoleLogSink(level: .fix(.error), categories: [.networking]))
+Logbook.add(sink: ConsoleLogSink(level: .fix(.error), categories: .include([.networking])))
 ```
 
 ### Formatting
@@ -89,7 +93,7 @@ let dateFormatter = DateFormatter()
 dateFormatter.dateStyle = .none
 dateFormatter.timeStyle = .short
 
-let console = ConsoleLogSink(level: .min(.debug), categories: [.networking])
+let console = ConsoleLogSink(level: .min(.debug), categories: .exclude([.networking]))
 console.dateFormatter = dateFormatter
 ```
 
@@ -101,7 +105,7 @@ console.format = "\(LogPlaceholder.category) \(LogPlaceholder.date): \(LogPlaceh
 
 ### Custom LogSink
 
-TODO:
+Create your custom sink by confirming LogSink protocol. 
 
 
 ## Carthage
@@ -123,7 +127,7 @@ Or update your Package.swift file manually:
 
 ```swift
 dependencies: [
-.package(url: "git@github.com:allaboutapps/Logbook.git", from: "0.2"),
+.package(url: "git@github.com:allaboutapps/Logbook.git", from: "1.1"),
     ....
 ],
 targets: [
