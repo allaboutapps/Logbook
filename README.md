@@ -3,7 +3,7 @@
 [![SPM Compatible](https://img.shields.io/badge/SPM-compatible-4BC51D.svg?style=flat)](https://swift.org/package-manager/)
 [![Carthage Compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
 
-Logbook is a lightweight logging framework
+Logbook is a lightweight logging framework for iOS and iPadOS
 
 ## Features
 
