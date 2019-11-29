@@ -38,24 +38,6 @@ let log = Logbook.self
 log.debug("Hello Logbook")
 ```
 
-
-### Extend LogCategory
-
-Extend LogCategory to create custom categories.
-
-```
-extension LogCategory {
-    
-    static let startup = LogCategory("startup", prefix: "🚦")
-    static let bluetooth = LogCategory("bluetooth", prefix: "🖲")
-    
-}
-```
-
-```
-log.debug("hello", category: .startup)
-```
-
 ### LogSinks
 
 Filter logs by level.
@@ -75,7 +57,7 @@ or
 ConsoleLogSink(level: .min(.debug), categories: .exclude([.networking]))
 ```
 
-Add multible sinks for different usecases:
+Add multiple sinks for different usecases:
 ```
 // Log all with min level warning
 Logbook.add(sink: ConsoleLogSink(level: .min(.warning)))
@@ -106,6 +88,24 @@ console.format = "\(LogPlaceholder.category) \(LogPlaceholder.date): \(LogPlaceh
 ### Custom LogSink
 
 Create your custom sink by confirming LogSink protocol. 
+
+
+### LogCategory
+
+Extend LogCategory to create custom categories.
+
+```
+extension LogCategory {
+    
+    static let startup = LogCategory("startup", prefix: "🚦")
+    static let bluetooth = LogCategory("bluetooth", prefix: "🖲")
+    
+}
+```
+
+```
+log.debug("hello", category: .startup)
+```
 
 
 ## Carthage
