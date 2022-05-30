@@ -30,6 +30,7 @@
 		19E97611238FC28F00ECED37 /* BackgroundTimer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19E97610238FC28F00ECED37 /* BackgroundTimer.swift */; };
 		19E97613238FE71D00ECED37 /* OSLogSink.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19E97612238FE71D00ECED37 /* OSLogSink.swift */; };
 		19E9761A23901FC200ECED37 /* LogCategoryFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19E9761923901FC200ECED37 /* LogCategoryFilter.swift */; };
+		C8D5F3962844B088004FBCCB /* FileLogTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8D5F3952844B088004FBCCB /* FileLogTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -99,6 +100,7 @@
 		19E97610238FC28F00ECED37 /* BackgroundTimer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackgroundTimer.swift; sourceTree = "<group>"; };
 		19E97612238FE71D00ECED37 /* OSLogSink.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OSLogSink.swift; sourceTree = "<group>"; };
 		19E9761923901FC200ECED37 /* LogCategoryFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogCategoryFilter.swift; sourceTree = "<group>"; };
+		C8D5F3952844B088004FBCCB /* FileLogTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileLogTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -177,6 +179,7 @@
 		19E975EA238EBB7400ECED37 /* LogbookTests */ = {
 			isa = PBXGroup;
 			children = (
+				C8D5F3952844B088004FBCCB /* FileLogTests.swift */,
 				19E975EB238EBB7400ECED37 /* LogbookTests.swift */,
 				19E975ED238EBB7400ECED37 /* Info.plist */,
 			);
@@ -393,6 +396,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				19E975EC238EBB7400ECED37 /* LogbookTests.swift in Sources */,
+				C8D5F3962844B088004FBCCB /* FileLogTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
