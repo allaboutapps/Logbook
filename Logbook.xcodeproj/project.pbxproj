@@ -31,6 +31,8 @@
 		19E97613238FE71D00ECED37 /* OSLogSink.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19E97612238FE71D00ECED37 /* OSLogSink.swift */; };
 		19E9761A23901FC200ECED37 /* LogCategoryFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19E9761923901FC200ECED37 /* LogCategoryFilter.swift */; };
 		C8D5F3962844B088004FBCCB /* FileLogTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8D5F3952844B088004FBCCB /* FileLogTests.swift */; };
+		F80857D728DB09C200F75461 /* ClosureLogSink.swift in Sources */ = {isa = PBXBuildFile; fileRef = F80857D628DB09C200F75461 /* ClosureLogSink.swift */; };
+		F80857D928DB0AA700F75461 /* ClosureLogTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F80857D828DB0AA700F75461 /* ClosureLogTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -101,6 +103,8 @@
 		19E97612238FE71D00ECED37 /* OSLogSink.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OSLogSink.swift; sourceTree = "<group>"; };
 		19E9761923901FC200ECED37 /* LogCategoryFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogCategoryFilter.swift; sourceTree = "<group>"; };
 		C8D5F3952844B088004FBCCB /* FileLogTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileLogTests.swift; sourceTree = "<group>"; };
+		F80857D628DB09C200F75461 /* ClosureLogSink.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClosureLogSink.swift; sourceTree = "<group>"; };
+		F80857D828DB0AA700F75461 /* ClosureLogTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClosureLogTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -179,6 +183,7 @@
 		19E975EA238EBB7400ECED37 /* LogbookTests */ = {
 			isa = PBXGroup;
 			children = (
+				F80857D828DB0AA700F75461 /* ClosureLogTests.swift */,
 				C8D5F3952844B088004FBCCB /* FileLogTests.swift */,
 				19E975EB238EBB7400ECED37 /* LogbookTests.swift */,
 				19E975ED238EBB7400ECED37 /* Info.plist */,
@@ -205,6 +210,7 @@
 		19E975FA238EBBC200ECED37 /* Sink */ = {
 			isa = PBXGroup;
 			children = (
+				F80857D628DB09C200F75461 /* ClosureLogSink.swift */,
 				19E975FB238EBBC200ECED37 /* ConsoleLogSink.swift */,
 				19E9760D238FB22C00ECED37 /* FileLogSink.swift */,
 				19E975FC238EBBC200ECED37 /* LogSink.swift */,
@@ -386,6 +392,7 @@
 				19E9760B238EC2B400ECED37 /* LogPlaceholder.swift in Sources */,
 				19E97603238EBBC300ECED37 /* LogLevel.swift in Sources */,
 				19E97602238EBBC300ECED37 /* LogCategory.swift in Sources */,
+				F80857D728DB09C200F75461 /* ClosureLogSink.swift in Sources */,
 				19E97613238FE71D00ECED37 /* OSLogSink.swift in Sources */,
 				19E97609238EBF3F00ECED37 /* LogMessage.swift in Sources */,
 			);
@@ -395,6 +402,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F80857D928DB0AA700F75461 /* ClosureLogTests.swift in Sources */,
 				19E975EC238EBB7400ECED37 /* LogbookTests.swift in Sources */,
 				C8D5F3962844B088004FBCCB /* FileLogTests.swift in Sources */,
 			);

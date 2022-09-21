@@ -30,21 +30,16 @@ extension Logbook.FileName {
 
 extension Logbook {
     
-    private func anyToString(_ item: Any?) -> String {
-        guard let unwrappedItem = item else { return "" }
-        
-        switch unwrappedItem {
+    private func anyToString(_ item: Any) -> String {
+        switch item {
         case let string as String:
             return string
-        case let error as Swift.Error:
-            return error.localizedDescription
-//        case let opt as Optional<Any>:
-//            guard let noOpt = opt else { return "" }
-//            return String(describing: noOpt)
         case let debugStringConvertible as CustomDebugStringConvertible:
             return debugStringConvertible.debugDescription
         case let stringConvertible as CustomStringConvertible:
             return stringConvertible.description
+        case let error as Swift.Error:
+            return error.localizedDescription
         default:
             return String(describing: item)
         }
@@ -55,8 +50,7 @@ extension Logbook {
             guard sink.shouldLevelBeLogged(level) else { continue }
             guard sink.shouldCategoryBeLogged(category) else { continue }
             
-            let messages: [String] = ((items.first as? [Any])?.compactMap({ anyToString($0) }) ?? [""])
-            
+            let messages = (items.first as? [Any?] ?? []).compactMap({ $0 }).map({ anyToString($0) })
             let header = LogMessageHeader(date: Date(), file: file, line: line, function: function)
             let message = LogMessage(header: header, level: level, category: category, messages: messages, separator: separator)
             
