@@ -11,6 +11,7 @@ import os
 
 public class OSLogSink: LogSink {
     
+    public let identifier: String
     public let level: LevelMode
     public let categories: LogCategoryFilter
     
@@ -21,7 +22,8 @@ public class OSLogSink: LogSink {
     private let customLog: OSLog
     private let isPublic: Bool
     
-    public init(level: LevelMode, categories: LogCategoryFilter = .all, isPublic: Bool = false) {
+    public init(identifier: String = UUID().uuidString, level: LevelMode, categories: LogCategoryFilter = .all, isPublic: Bool = false) {
+        self.identifier = identifier
         self.level = level
         self.categories = categories
         self.isPublic = isPublic

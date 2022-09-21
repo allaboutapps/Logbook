@@ -9,6 +9,9 @@
 import Foundation
 
 public final class FileLogSink: LogSink {
+    
+    public let identifier: String
+    
     public let level: LevelMode
     public let categories: LogCategoryFilter
 
@@ -20,7 +23,8 @@ public final class FileLogSink: LogSink {
     public var dateFormatter: DateFormatter
     private let accessQueue = DispatchQueue(label: "LoggingQueue", qos: .utility)
 
-    public init(level: LevelMode, categories: LogCategoryFilter = .all, baseDirectory: URL, fileName: String = "Log", maxFileSize: UInt64 = 1024) {
+    public init(identifier: String = UUID().uuidString, level: LevelMode, categories: LogCategoryFilter = .all, baseDirectory: URL, fileName: String = "Log", maxFileSize: UInt64 = 1024) {
+        self.identifier = identifier
         self.level = level
         self.categories = categories
         logFileURL = baseDirectory.appendingPathComponent("\(fileName).log", isDirectory: false)

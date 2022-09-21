@@ -15,6 +15,8 @@ public enum LevelMode {
 
 public protocol LogSink {
     
+    var identifier: String { get }
+    
     var level: LevelMode { get }
     
     var categories: LogCategoryFilter { get }

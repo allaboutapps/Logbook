@@ -10,6 +10,8 @@ import Foundation
 
 public class ConsoleLogSink: LogSink {
     
+    public let identifier: String
+    
     public let level: LevelMode
     public let categories: LogCategoryFilter
     
@@ -17,7 +19,8 @@ public class ConsoleLogSink: LogSink {
     public var format: String = LogPlaceholder.defaultLogFormat
     public var dateFormatter: DateFormatter
     
-    public init(level: LevelMode, categories: LogCategoryFilter = .all) {
+    public init(identifier: String = UUID().uuidString, level: LevelMode, categories: LogCategoryFilter = .all) {
+        self.identifier = identifier
         self.level = level
         self.categories = categories
         self.dateFormatter = DateFormatter()
