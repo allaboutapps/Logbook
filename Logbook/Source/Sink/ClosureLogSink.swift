@@ -1,14 +1,14 @@
 //
-//  BaseSink.swift
-//  LogBook
+//  ClosureLogSink.swift
+//  Logbook
 //
-//  Created by Stefan Wieland on 25.10.19.
-//  Copyright © 2019 aaa - all about apps Gmbh. All rights reserved.
+//  Created by Stefan Wieland on 21.09.22.
+//  Copyright © 2022 allaboutapps GmbH. All rights reserved.
 //
 
 import Foundation
 
-public class ConsoleLogSink: LogSink {
+public class ClosureLogSink: LogSink {
     
     public let identifier: String
     
@@ -19,13 +19,16 @@ public class ConsoleLogSink: LogSink {
     public var format: String = LogPlaceholder.defaultLogFormat
     public var dateFormatter: DateFormatter
     
-    public init(identifier: String = UUID().uuidString, level: LevelMode, categories: LogCategoryFilter = .all) {
+    private let callback: (String) -> Void
+    
+    public init(identifier: String = UUID().uuidString, level: LevelMode, categories: LogCategoryFilter = .all, callback: @escaping (String) -> Void) {
         self.identifier = identifier
         self.level = level
         self.categories = categories
         self.dateFormatter = DateFormatter()
         self.dateFormatter.dateStyle = .short
         self.dateFormatter.timeStyle = .medium
+        self.callback = callback
     }
     
     public func send(_ message: LogMessage) {
@@ -41,7 +44,7 @@ public class ConsoleLogSink: LogSink {
         formattedMessage = formattedMessage.replacingOccurrences(of: LogPlaceholder.line, with: "\(message.header.line)")
         formattedMessage = formattedMessage.replacingOccurrences(of: LogPlaceholder.messages, with: messages)
         
-        print(formattedMessage)
+        callback(formattedMessage)
     }
 
 }

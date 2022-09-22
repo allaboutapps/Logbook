@@ -9,6 +9,9 @@
 import Foundation
 
 public final class FileLogSink: LogSink {
+    
+    public let identifier: String
+    
     public let level: LevelMode
     public let categories: LogCategoryFilter
 
@@ -20,7 +23,8 @@ public final class FileLogSink: LogSink {
     public var dateFormatter: DateFormatter
     private let accessQueue = DispatchQueue(label: "LoggingQueue", qos: .utility)
 
-    public init(level: LevelMode, categories: LogCategoryFilter = .all, baseDirectory: URL, fileName: String = "Log", maxFileSize: UInt64 = 1024) {
+    public init(identifier: String = UUID().uuidString, level: LevelMode, categories: LogCategoryFilter = .all, baseDirectory: URL, fileName: String = "Log", maxFileSize: UInt64 = 1024) {
+        self.identifier = identifier
         self.level = level
         self.categories = categories
         logFileURL = baseDirectory.appendingPathComponent("\(fileName).log", isDirectory: false)
@@ -72,17 +76,17 @@ public final class FileLogSink: LogSink {
     private func createString(for message: LogMessage) -> String {
         let messages = message.messages.joined(separator: message.separator ?? itemSeparator)
 
-        var final = format
-        final = final.replacingOccurrences(of: LogPlaceholder.category, with: message.category.prefix ?? "")
-        final = final.replacingOccurrences(of: LogPlaceholder.level, with: "\(message.level)")
-        final = final.replacingOccurrences(of: LogPlaceholder.date, with: dateFormatter.string(from: message.header.date))
-        final = final.replacingOccurrences(of: LogPlaceholder.file, with: message.header.file.name)
-        final = final.replacingOccurrences(of: LogPlaceholder.function, with: message.header.function)
-        final = final.replacingOccurrences(of: LogPlaceholder.line, with: "\(message.header.line)")
-        final = final.replacingOccurrences(of: LogPlaceholder.messages, with: messages)
-        final += "\n"
+        var formattedMessage = format
+        formattedMessage = formattedMessage.replacingOccurrences(of: LogPlaceholder.category, with: message.category.prefix ?? "")
+        formattedMessage = formattedMessage.replacingOccurrences(of: LogPlaceholder.level, with: "\(message.level)")
+        formattedMessage = formattedMessage.replacingOccurrences(of: LogPlaceholder.date, with: dateFormatter.string(from: message.header.date))
+        formattedMessage = formattedMessage.replacingOccurrences(of: LogPlaceholder.file, with: message.header.file.name)
+        formattedMessage = formattedMessage.replacingOccurrences(of: LogPlaceholder.function, with: message.header.function)
+        formattedMessage = formattedMessage.replacingOccurrences(of: LogPlaceholder.line, with: "\(message.header.line)")
+        formattedMessage = formattedMessage.replacingOccurrences(of: LogPlaceholder.messages, with: messages)
+        formattedMessage += "\n"
 
-        return final
+        return formattedMessage
     }
 }
 

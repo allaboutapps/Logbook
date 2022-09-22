@@ -52,7 +52,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //        addFileLog()
         
         // testmessage
-        logToFile()
+        // logToFile()
         
         return true
     }

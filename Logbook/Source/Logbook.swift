@@ -14,80 +14,231 @@ public class Logbook {
     
     public typealias FileName = String
     
-    // MARK: Debug
+    public init() {}
+    private static let shared = Logbook()
     
-    public class func debug(_ items: Any?..., category: LogCategory, separator: String, file: FileName = #file, line: UInt = #line, function: String = #function) {
+    private var sinks = [LogSink]()
+    private let queue = DispatchQueue(label: "LoggingQueue", qos: .utility)
+        
+}
+
+extension Logbook.FileName {
+    var name: String { components(separatedBy: "/").last ?? "" }
+}
+
+// MARK: - Private
+
+extension Logbook {
+    
+    private func anyToString(_ item: Any) -> String {
+        switch item {
+        case let string as String:
+            return string
+        case let debugStringConvertible as CustomDebugStringConvertible:
+            return debugStringConvertible.debugDescription
+        case let stringConvertible as CustomStringConvertible:
+            return stringConvertible.description
+        case let error as Swift.Error:
+            return error.localizedDescription
+        default:
+            return String(describing: item)
+        }
+    }
+    
+    private func send(_ items: Any?..., category: LogCategory = .default, level: LogLevel, separator: String? = nil, file: FileName = #file, line: UInt = #line, function: String = #function) {
+        for sink in sinks {
+            guard sink.shouldLevelBeLogged(level) else { continue }
+            guard sink.shouldCategoryBeLogged(category) else { continue }
+            
+            let messages = (items.first as? [Any?] ?? []).compactMap({ $0 }).map({ anyToString($0) })
+            let header = LogMessageHeader(date: Date(), file: file, line: line, function: function)
+            let message = LogMessage(header: header, level: level, category: category, messages: messages, separator: separator)
+            
+            if level.shouldLogAsynchronously {
+                queue.async {
+                    sink.send(message)
+                }
+            } else {
+                queue.sync {
+                    sink.send(message)
+                }
+            }
+        }
+    }
+}
+
+// MARK: - Public Instance Methods
+    
+extension Logbook {
+    
+    public func debug(_ items: Any?..., category: LogCategory, separator: String, file: FileName = #file, line: UInt = #line, function: String = #function) {
         send(items, category: category, level: .debug, separator: separator, file: file, line: line, function: function)
     }
     
-    public class func debug(_ items: Any?..., category: LogCategory, file: FileName = #file, line: UInt = #line, function: String = #function) {
+    public func debug(_ items: Any?..., category: LogCategory, file: FileName = #file, line: UInt = #line, function: String = #function) {
         send(items, category: category, level: .debug, file: file, line: line, function: function)
     }
     
-    public class func debug(_ items: Any?..., file: FileName = #file, line: UInt = #line, function: String = #function) {
+    public func debug(_ items: Any?..., file: FileName = #file, line: UInt = #line, function: String = #function) {
         send(items, category: .default, level: .debug, file: file, line: line, function: function)
     }
     
     // MARK: Verbose
     
-    public class func verbose(_ items: Any?..., category: LogCategory, separator: String, file: FileName = #file, line: UInt = #line, function: String = #function) {
+    public func verbose(_ items: Any?..., category: LogCategory, separator: String, file: FileName = #file, line: UInt = #line, function: String = #function) {
         send(items, category: category, level: .verbose, separator: separator, file: file, line: line, function: function)
     }
     
-    public class func verbose(_ items: Any?..., category: LogCategory, file: FileName = #file, line: UInt = #line, function: String = #function) {
+    public func verbose(_ items: Any?..., category: LogCategory, file: FileName = #file, line: UInt = #line, function: String = #function) {
         send(items, category: category, level: .verbose, file: file, line: line, function: function)
     }
     
-    public class func verbose(_ items: Any?..., file: FileName = #file, line: UInt = #line, function: String = #function) {
+    public func verbose(_ items: Any?..., file: FileName = #file, line: UInt = #line, function: String = #function) {
         send(items, category: .default, level: .verbose, file: file, line: line, function: function)
     }
     
     // MARK: Info
     
-    public class func info(_ items: Any?..., category: LogCategory, separator: String, file: FileName = #file, line: UInt = #line, function: String = #function) {
+    public func info(_ items: Any?..., category: LogCategory, separator: String, file: FileName = #file, line: UInt = #line, function: String = #function) {
         send(items, category: category, level: .info, separator: separator, file: file, line: line, function: function)
     }
     
-    public class func info(_ items: Any?..., category: LogCategory, file: FileName = #file, line: UInt = #line, function: String = #function) {
+    public func info(_ items: Any?..., category: LogCategory, file: FileName = #file, line: UInt = #line, function: String = #function) {
         send(items, category: category, level: .info, file: file, line: line, function: function)
     }
     
-    public class func info(_ items: Any?..., file: FileName = #file, line: UInt = #line, function: String = #function) {
+    public func info(_ items: Any?..., file: FileName = #file, line: UInt = #line, function: String = #function) {
         send(items, category: .default, level: .info, file: file, line: line, function: function)
     }
     
     // MARK: Warning
     
-    public class func warning(_ items: Any?..., category: LogCategory, separator: String, file: FileName = #file, line: UInt = #line, function: String = #function) {
+    public func warning(_ items: Any?..., category: LogCategory, separator: String, file: FileName = #file, line: UInt = #line, function: String = #function) {
         send(items, category: category, level: .warning, separator: separator, file: file, line: line, function: function)
     }
     
-    public class func warning(_ items: Any?..., category: LogCategory, file: FileName = #file, line: UInt = #line, function: String = #function) {
+    public func warning(_ items: Any?..., category: LogCategory, file: FileName = #file, line: UInt = #line, function: String = #function) {
         send(items, category: category, level: .warning, file: file, line: line, function: function)
     }
     
-    public class func warning(_ items: Any?..., file: FileName = #file, line: UInt = #line, function: String = #function) {
+    public func warning(_ items: Any?..., file: FileName = #file, line: UInt = #line, function: String = #function) {
         send(items, category: .default, level: .warning, file: file, line: line, function: function)
     }
     
     // MARK: Error
     
-    public class func error(_ items: Any?..., category: LogCategory, separator: String, file: FileName = #file, line: UInt = #line, function: String = #function) {
+    public func error(_ items: Any?..., category: LogCategory, separator: String, file: FileName = #file, line: UInt = #line, function: String = #function) {
         send(items, category: category, level: .error, separator: separator, file: file, line: line, function: function)
     }
     
-    public class func error(_ items: Any?..., category: LogCategory, file: FileName = #file, line: UInt = #line, function: String = #function) {
+    public func error(_ items: Any?..., category: LogCategory, file: FileName = #file, line: UInt = #line, function: String = #function) {
         send(items, category: category, level: .error, file: file, line: line, function: function)
     }
     
-    public class func error(_ items: Any?..., file: FileName = #file, line: UInt = #line, function: String = #function) {
+    public func error(_ items: Any?..., file: FileName = #file, line: UInt = #line, function: String = #function) {
         send(items, category: .default, level: .error, file: file, line: line, function: function)
+    }
+    
+    // MARK: Sinks
+    
+    public func add(sink: LogSink) {
+        sinks.append(sink)
+    }
+    
+    public func removeSink(_ sink: LogSink) {
+        guard let index = sinks.firstIndex(where: { $0.identifier == sink.identifier }) else { return }
+        sinks.remove(at: index)
+    }
+    
+    public func removeAllSinks() {
+        sinks.removeAll()
+    }
+    
+}
+
+// MARK: - Public Static Methods
+
+extension Logbook {
+    
+    // MARK: Debug
+    
+    public class func debug(_ items: Any?..., category: LogCategory, separator: String, file: FileName = #file, line: UInt = #line, function: String = #function) {
+        shared.debug(items, category: category, separator: separator, file: file, line: line, function: function)
+    }
+    
+    public class func debug(_ items: Any?..., category: LogCategory, file: FileName = #file, line: UInt = #line, function: String = #function) {
+        shared.debug(items, category: category, file: file, line: line, function: function)
+    }
+    
+    public class func debug(_ items: Any?..., file: FileName = #file, line: UInt = #line, function: String = #function) {
+        shared.debug(items, file: file, line: line, function: function)
+    }
+    
+    // MARK: Verbose
+    
+    public class func verbose(_ items: Any?..., category: LogCategory, separator: String, file: FileName = #file, line: UInt = #line, function: String = #function) {
+        shared.verbose(items, category: category, separator: separator, file: file, line: line, function: function)
+    }
+    
+    public class func verbose(_ items: Any?..., category: LogCategory, file: FileName = #file, line: UInt = #line, function: String = #function) {
+        shared.verbose(items, category: category, file: file, line: line, function: function)
+    }
+    
+    public class func verbose(_ items: Any?..., file: FileName = #file, line: UInt = #line, function: String = #function) {
+        shared.verbose(items, file: file, line: line, function: function)
+    }
+    
+    // MARK: Info
+    
+    public class func info(_ items: Any?..., category: LogCategory, separator: String, file: FileName = #file, line: UInt = #line, function: String = #function) {
+        shared.info(items, category: category, separator: separator, file: file, line: line, function: function)
+    }
+    
+    public class func info(_ items: Any?..., category: LogCategory, file: FileName = #file, line: UInt = #line, function: String = #function) {
+        shared.info(items, category: category, file: file, line: line, function: function)
+    }
+    
+    public class func info(_ items: Any?..., file: FileName = #file, line: UInt = #line, function: String = #function) {
+        shared.info(items, file: file, line: line, function: function)
+    }
+    
+    // MARK: Warning
+    
+    public class func warning(_ items: Any?..., category: LogCategory, separator: String, file: FileName = #file, line: UInt = #line, function: String = #function) {
+        shared.warning(items, category: category, separator: separator, file: file, line: line, function: function)
+    }
+    
+    public class func warning(_ items: Any?..., category: LogCategory, file: FileName = #file, line: UInt = #line, function: String = #function) {
+        shared.warning(items, category: category, file: file, line: line, function: function)
+    }
+    
+    public class func warning(_ items: Any?..., file: FileName = #file, line: UInt = #line, function: String = #function) {
+        shared.warning(items, file: file, line: line, function: function)
+    }
+    
+    // MARK: Error
+    
+    public class func error(_ items: Any?..., category: LogCategory, separator: String, file: FileName = #file, line: UInt = #line, function: String = #function) {
+        shared.error(items, category: category, separator: separator, file: file, line: line, function: function)
+    }
+    
+    public class func error(_ items: Any?..., category: LogCategory, file: FileName = #file, line: UInt = #line, function: String = #function) {
+        shared.error(items, category: category, file: file, line: line, function: function)
+    }
+    
+    public class func error(_ items: Any?..., file: FileName = #file, line: UInt = #line, function: String = #function) {
+        shared.error(items, file: file, line: line, function: function)
     }
     
     // MARK: Sinks
     
     public class func add(sink: LogSink) {
         shared.sinks.append(sink)
+    }
+    
+    public class func removeSink(_ sink: LogSink) {
+        guard let index = shared.sinks.firstIndex(where: { $0.identifier == sink.identifier }) else { return }
+        shared.sinks.remove(at: index)
     }
     
     public class func removeAllSinks() {
@@ -97,60 +248,7 @@ public class Logbook {
     // MARK: Internal Logic
     
     private class func send(_ items: Any?..., category: LogCategory = .default, level: LogLevel, separator: String? = nil, file: FileName = #file, line: UInt = #line, function: String = #function) {
-    
-        for sink in shared.sinks {
-            guard sink.shouldLevelBeLogged(level) else { continue }
-            guard sink.shouldCategoryBeLogged(category) else { continue }
-            
-            let messages: [String] = ((items.first as? [Any])?.compactMap({ shared.anyString($0) }) ?? [""])
-            
-            let header = LogMessageHeader(date: Date(), file: file, line: line, function: function)
-            let message = LogMessage(header: header, level: level, category: category, messages: messages, separator: separator)
-            
-            if level.shouldLogAsynchronously {
-                shared.queue.async {
-                    sink.send(message)
-                }
-            } else {
-                shared.queue.sync {
-                    sink.send(message)
-                }
-            }
-            
-        }
-    }
-    
-    private func anyString(_ item: Any?) -> String {
-        guard let item = item else { return "" }
-        
-        switch item {
-        case let string as String:
-            return string
-        case let error as Swift.Error:
-            return error.localizedDescription
-        case let debugStringConvertible as CustomDebugStringConvertible:
-            return debugStringConvertible.debugDescription
-        case let stringConvertible as CustomStringConvertible:
-            return stringConvertible.description
-        default:
-            return "\(item)"
-        }
-    }
-    
-    private init() {}
-    private static let shared = Logbook()
-    
-    private var sinks = [LogSink]()
-    private let queue = DispatchQueue(label: "LoggingQueue", qos: .utility)
-        
-}
-
-// MARK: - Logbook.FileName
-
-extension Logbook.FileName {
-    
-    var name: String {
-        return components(separatedBy: "/").last ?? ""
+        shared.send(items, category: category, level: level, separator: separator, file: file, line: line, function: function)
     }
     
 }
