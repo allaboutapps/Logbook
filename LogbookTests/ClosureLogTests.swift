@@ -171,4 +171,46 @@ class ClosureLogTests: XCTestCase {
             XCTAssertEqual(logMessage, "TestError.missingData")
         }
     }
+    
+    func testDetailedClosureSink() {
+        let testMessage = "Test Message"
+        
+        var category: String = ""
+        var level: LogLevel = .error
+        var message: String = ""
+        
+        var file: String = ""
+        var function: String = ""
+        var line: UInt = 0
+        
+        let expectation = expectation(description: "expectation")
+        
+        let sink = ClosureLogSink(level: .min(.debug), detailedCallback: { log in
+            category = log.category.identifier
+            level = log.level
+            message = log.messages.first ?? ""
+            
+            file = log.header.file
+            function = log.header.function
+            line = log.header.line
+            
+            expectation.fulfill()
+        })
+        
+        let logFormat = "\(LogPlaceholder.messages)"
+        sink.format = logFormat
+        logbook.add(sink: sink)
+        
+        logbook.debug(testMessage, category: .networking)
+        
+        waitForExpectations(timeout: 3) { _ in
+            XCTAssertEqual(category, LogCategory.networking.identifier)
+            XCTAssertEqual(level, LogLevel.debug)
+            XCTAssertEqual(message, testMessage)
+            
+            XCTAssertTrue(file.contains("ClosureLogTests.swift"))
+            XCTAssertEqual(function, "testDetailedClosureSink()")
+            XCTAssertNotEqual(line, 0)
+        }
+    }
 }
