@@ -19,9 +19,14 @@ public class ClosureLogSink: LogSink {
     public var format: String = LogPlaceholder.defaultLogFormat
     public var dateFormatter: DateFormatter
     
-    private let callback: (String) -> Void
+    private let callback: ((String) -> Void)?
+    private let detailedCallback: ((LogMessage) -> Void)?
     
-    public init(identifier: String = UUID().uuidString, level: LevelMode, categories: LogCategoryFilter = .all, callback: @escaping (String) -> Void) {
+    public init(identifier: String = UUID().uuidString,
+                level: LevelMode,
+                categories: LogCategoryFilter = .all,
+                callback: ((String) -> Void)? = nil,
+                detailedCallback: ((LogMessage) -> Void)? = nil) {
         self.identifier = identifier
         self.level = level
         self.categories = categories
@@ -29,6 +34,7 @@ public class ClosureLogSink: LogSink {
         self.dateFormatter.dateStyle = .short
         self.dateFormatter.timeStyle = .medium
         self.callback = callback
+        self.detailedCallback = detailedCallback
     }
     
     public func send(_ message: LogMessage) {
@@ -44,7 +50,8 @@ public class ClosureLogSink: LogSink {
         formattedMessage = formattedMessage.replacingOccurrences(of: LogPlaceholder.line, with: "\(message.header.line)")
         formattedMessage = formattedMessage.replacingOccurrences(of: LogPlaceholder.messages, with: messages)
         
-        callback(formattedMessage)
+        callback?(formattedMessage)
+        detailedCallback?(message)
     }
 
 }
