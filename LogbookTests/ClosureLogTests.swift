@@ -203,7 +203,7 @@ class ClosureLogTests: XCTestCase {
         
         logbook.debug(testMessage, category: .networking)
         
-        waitForExpectations(timeout: 3) { (error) in
+        waitForExpectations(timeout: 3) { _ in
             XCTAssertEqual(category, LogCategory.networking.identifier)
             XCTAssertEqual(level, LogLevel.debug)
             XCTAssertEqual(message, testMessage)
