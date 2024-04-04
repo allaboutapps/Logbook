@@ -1,4 +1,4 @@
-// swift-tools-version:5.0
+// swift-tools-version:5.3
 
 import PackageDescription
 
@@ -11,10 +11,17 @@ let package = Package(
         .watchOS(.v3)
     ],
     products: [
-        .library(name: "Logbook", targets: ["Logbook"])
+        .library(
+            name: "Logbook", 
+            targets: ["Logbook"]
+        )
     ],
     targets: [
-        .target(name: "Logbook", path: "Logbook/Source")
+        .target(
+            name: "Logbook", 
+            path: "Logbook/Source",
+            resources: [.process("PrivacyInfo.xcprivacy")]
+        )
     ],
     swiftLanguageVersions: [.v5]
 )
